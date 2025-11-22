@@ -287,12 +287,27 @@ export async function getTokenInfoFromDexScreener(address: string): Promise<Toke
     
     if (data?.pairs && data.pairs.length > 0) {
       const pair = data.pairs[0] // Use the first pair for info
+      const baseToken = pair.baseToken
+      
+      // Try multiple logo sources with fallbacks
+      let logoURI: string | undefined
+      
+      // 1. Try DexScreener image URL if available
+      if (baseToken.logoURI) {
+        logoURI = baseToken.logoURI
+      } else if (pair.info?.imageUrl) {
+        logoURI = pair.info.imageUrl
+      } else {
+        // 2. Try Jupiter's logo service
+        logoURI = `https://token.jup.ag/svg/${baseToken.address}.svg`
+      }
+      
       return {
-        address: pair.baseToken.address,
-        symbol: pair.baseToken.symbol,
-        name: pair.baseToken.name,
+        address: baseToken.address,
+        symbol: baseToken.symbol || 'UNKNOWN',
+        name: baseToken.name || 'Unknown Token',
         decimals: 0, // DexScreener doesn't provide decimals directly here
-        logoURI: `https://token.jup.ag/svg/${pair.baseToken.address}.svg`, // Fallback to Jupiter's logo service
+        logoURI,
       }
     }
     return null

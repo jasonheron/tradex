@@ -24,7 +24,7 @@ export default function TokenChart({ mint, transactions, currentPrice, timeframe
         fontFamily: 'Space Mono, monospace',
       },
       width: containerRef.current.clientWidth,
-      height: containerRef.current.clientHeight || 300,
+      height: containerRef.current.offsetHeight || 300,
       grid: {
         vertLines: { color: 'rgba(255,255,255,0.05)' },
         horzLines: { color: 'rgba(255,255,255,0.05)' },
@@ -82,7 +82,7 @@ export default function TokenChart({ mint, transactions, currentPrice, timeframe
       if (containerRef.current) {
         chart.applyOptions({
           width: containerRef.current.clientWidth,
-          height: containerRef.current.clientHeight || 300,
+          height: containerRef.current.offsetHeight || 300,
         })
       }
     }
@@ -96,7 +96,7 @@ export default function TokenChart({ mint, transactions, currentPrice, timeframe
   }, [mint, currentPrice, timeframe])
 
   return (
-    <div className="flex-1 min-h-0 p-4">
+    <div className="flex-1 min-h-0">
       <div ref={containerRef} className="w-full h-full" />
     </div>
   )
