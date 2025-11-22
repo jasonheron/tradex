@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { createChart, ColorType } from 'lightweight-charts'
+import { createChart, ColorType, IChartApi, ISeriesApi, Time } from 'lightweight-charts'
 import { Transaction } from '@/hooks/usePortfolio'
 
 interface TokenChartProps {
@@ -72,7 +72,7 @@ export default function TokenChart({ mint, transactions, currentPrice, timeframe
     candleSeries.setData(candles)
 
     const volumes = candles.map((candle) => ({
-      time: candle.time,
+      time: candle.time as Time,
       value: Math.random() * 500 + 10,
       color: candle.open > candle.close ? '#ef4444' : '#1dd671',
     }))
@@ -102,8 +102,20 @@ export default function TokenChart({ mint, transactions, currentPrice, timeframe
   )
 }
 
-function generateMockCandles(currentPrice: number) {
-  const candles = []
+function generateMockCandles(currentPrice: number): Array<{
+  time: Time
+  open: number
+  high: number
+  low: number
+  close: number
+}> {
+  const candles: Array<{
+    time: Time
+    open: number
+    high: number
+    low: number
+    close: number
+  }> = []
   let base = currentPrice * 0.85
   for (let i = 60; i > 0; i--) {
     const open = base + (Math.random() - 0.5) * (currentPrice * 0.02)
@@ -111,7 +123,7 @@ function generateMockCandles(currentPrice: number) {
     const high = Math.max(open, close) + Math.random() * currentPrice * 0.01
     const low = Math.min(open, close) - Math.random() * currentPrice * 0.01
     candles.push({
-      time: Date.now() / 1000 - i * 60,
+      time: (Math.floor(Date.now() / 1000) - i * 60) as Time,
       open: parseFloat(open.toFixed(4)),
       high: parseFloat(high.toFixed(4)),
       low: parseFloat(low.toFixed(4)),
