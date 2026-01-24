@@ -3,8 +3,8 @@ import './globals.css'
 import { WalletProvider } from '@/components/WalletProvider'
 
 export const metadata: Metadata = {
-  title: 'TradeX - Solana Memecoin Trading',
-  description: 'Track and trade Solana memecoins',
+  title: 'TradeX - Solana Memecoin Trading (soon)',
+  description: 'Solana Wallet View',
 }
 
 export default function RootLayout({
